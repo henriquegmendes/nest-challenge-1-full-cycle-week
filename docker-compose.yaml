@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  app:
+    build: .
+    entrypoint: sh -c "npm install && npm run start:dev"
+    volumes:
+      - .:/home/node/app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - sqlite3
+
+  sqlite3:
+    image: nouchka/sqlite3:latest
+    stdin_open: true
+    tty: true
+    volumes:
+      - ./docker/db/:/root/db/
+    environment:
+      - SQLITE_USER=sqlite
+      - SQLITE_PASSWORD=sqlite
+      - SQLITE_DB=sqlite
+    ports:
+      - "5432:5432"
